@@ -23,7 +23,7 @@ public class HelpCommandHandler implements CommandHandler {
         String message = """
     Доступные команды:
             /start - Начать работу
-            /users - Показать список пользователей
+            /clients - Показать список пользователей
             /help - Показать справку
     """;
         sender.sendMessage(chatId, message);

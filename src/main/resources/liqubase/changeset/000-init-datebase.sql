@@ -1,1 +1,1 @@
-CREATE DATABASE testdb;
+CREATE DATABASE hairdress;

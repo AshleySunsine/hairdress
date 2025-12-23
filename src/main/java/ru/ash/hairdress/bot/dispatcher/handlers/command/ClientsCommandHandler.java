@@ -3,43 +3,43 @@ package ru.ash.hairdress.bot.dispatcher.handlers.command;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.ash.hairdress.bot.sender.MessageSender;
-import ru.ash.hairdress.model.User;
-import ru.ash.hairdress.service.UserService;
+import ru.ash.hairdress.model.Client;
+import ru.ash.hairdress.service.ClientService;
 
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class UsersCommandHandler implements CommandHandler {
-    private final UserService userService;
+public class ClientsCommandHandler implements CommandHandler {
+    private final ClientService clientService;
     private final MessageSender sender;
 
     @Override
     public String getCommand() {
-        return "/users";
+        return "/clients";
     }
 
     @Override
     public void handle(Long chatId) {
-        List<User> users = userService.getAllUsers();
+        List<Client> clients = clientService.getAllClients();
 
-        if (users.isEmpty()) {
+        if (clients.isEmpty()) {
             sender.sendMessage(chatId, "📭 В базе данных нет пользователей.");
             return;
         }
 
-        StringBuilder response = new StringBuilder("📋 Список пользователей:\n\n");
-        for (int i = 0; i < users.size(); i++) {
-            User user = users.get(i);
+        StringBuilder response = new StringBuilder("📋 Список клиентов:\n\n");
+        for (int i = 0; i < clients.size(); i++) {
+            Client client = clients.get(i);
             response.append(i + 1)
                     .append(". ")
-                    .append(user.getName())
+                    .append(client.getName())
                     .append(" (ID: ")
-                    .append(user.getId())
+                    .append(client.getId())
                     .append(")\n");
         }
 
-        response.append("\nВсего пользователей: ").append(users.size());
+        response.append("\nВсего клиентов: ").append(clients.size());
         sender.sendMessage(chatId, response.toString());
     }
 }

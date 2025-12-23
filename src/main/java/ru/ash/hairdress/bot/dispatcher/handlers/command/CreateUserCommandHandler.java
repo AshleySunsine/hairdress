@@ -1,6 +1,8 @@
 package ru.ash.hairdress.bot.dispatcher.handlers.command;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -10,53 +12,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
-public class StartCommandHandler implements CommandHandler {
+public class CreateUserCommandHandler implements CommandHandler {
+    @Autowired
     private final MessageSender sender;
 
     @Override
     public String getCommand() {
-        return "/start";
+        return "/starst";
     }
 
     @Override
     public void handle(Long chatId) {
-        String welcomeMessage = """
-            ✂️ *Добро пожаловать в систему учёта парикмахерской!*
-            
-            Выберите действие:
-            """;
+        String welcomeMessage = "👋 Выберите действие:";
 
-        InlineKeyboardMarkup keyboard = createMainMenuKeyboard();
-        sender.sendMessageWithKeyboard(chatId, welcomeMessage, keyboard);
-    }
-
-    private InlineKeyboardMarkup createMainMenuKeyboard() {
+        // Создаем инлайн-клавиатуру
         InlineKeyboardMarkup keyboard = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
 
+        // Первый ряд кнопок
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         row1.add(InlineKeyboardButton.builder()
-                .text("👥 Управление клиентами")
-                .callbackData("CLIENT_MANAGEMENT")
+                .text("➕ Добавить пользователя")
+                .callbackData("CREATE_USER")
                 .build());
 
+        // Второй ряд кнопок
         List<InlineKeyboardButton> row2 = new ArrayList<>();
         row2.add(InlineKeyboardButton.builder()
-                .text("📅 Записи на услуги")
-                .callbackData("APPOINTMENTS")
-                .build());
-
-        List<InlineKeyboardButton> row3 = new ArrayList<>();
-        row3.add(InlineKeyboardButton.builder()
-                .text("📊 Отчёты и статистика")
-                .callbackData("REPORTS")
+                .text("🗑 Удалить пользователя")
+                .callbackData("DELETE_USER")
                 .build());
 
         rows.add(row1);
         rows.add(row2);
-        rows.add(row3);
         keyboard.setKeyboard(rows);
-        return keyboard;
+
+        sender.sendMessageWithKeyboard(chatId, welcomeMessage, keyboard);
     }
 }

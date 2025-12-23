@@ -16,8 +16,8 @@ public class BotStatusController {
                 "service": "Telegram User List Bot",
                 "description": "Бот для отображения списка пользователей из базы данных",
                 "endpoints": {
-                    "telegram": "Команды /start, /users, /help",
-                    "api": "/api/users"
+                    "telegram": "Команды /start, /clients, /help",
+                    "api": "/api/clients"
                 }
             }
             """;

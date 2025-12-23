@@ -1,12 +1,13 @@
-CREATE TABLE users (
+CREATE TABLE clients (
                        id BIGSERIAL PRIMARY KEY,
                        name VARCHAR(255) NOT NULL,
                        email VARCHAR(255) UNIQUE NOT NULL,
+                       phone VARCHAR(255),
                        birth_date DATE,
                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO users (name, email, birth_date) VALUES
+INSERT INTO clients (name, email, birth_date) VALUES
                                                 ('Иван Иванов', 'ivan@example.com', '1990-05-15'),
                                                 ('Мария Петрова', 'maria@example.com', '1985-11-23'),
                                                 ('Алексей Сидоров', 'alex@example.com', '1995-03-08'),

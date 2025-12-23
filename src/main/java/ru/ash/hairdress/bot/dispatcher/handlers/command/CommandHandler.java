@@ -1,6 +1,7 @@
 package ru.ash.hairdress.bot.dispatcher.handlers.command;
 
-public interface CommandHandler {
+import ru.ash.hairdress.bot.dispatcher.handlers.ActionHandler;
+
+public interface CommandHandler extends ActionHandler {
     String getCommand();
-    void handle(Long chatId);
 }

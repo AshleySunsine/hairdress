@@ -1,6 +1,7 @@
 package ru.ash.hairdress.bot.dispatcher.handlers.callback;
 
-public interface CallbackHandler {
+import ru.ash.hairdress.bot.dispatcher.handlers.ActionHandler;
+
+public interface CallbackHandler extends ActionHandler {
     String getCallback();
-    void handle(Long chatId);
 }

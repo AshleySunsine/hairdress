@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "clients")
+public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,15 +17,19 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(unique = true, nullable = false)
+    private String phone;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     // Конструкторы
-    public User() {}
+    public Client() {}
 
-    public User(String name, String email) {
+    public Client(String name, String email, String phone) {
         this.name = name;
         this.email = email;
+        this.phone = phone;
         this.createdAt = LocalDateTime.now();
     }
 
@@ -41,4 +45,8 @@ public class User {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 }

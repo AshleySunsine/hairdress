@@ -2,20 +2,20 @@ package ru.ash.hairdress.bot.dispatcher.handlers.callback;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.ash.hairdress.bot.dispatcher.service.dialog.UserCreationDialogService;
+import ru.ash.hairdress.bot.dispatcher.handlers.command.StartCommandHandler;
 
 @Component
 @RequiredArgsConstructor
-public class CreateUserCallbackHandler implements CallbackHandler {
-    private final UserCreationDialogService dialogService;
+public class StartCallbackHandler implements CallbackHandler {
+    private final StartCommandHandler startCommandHandler;
 
     @Override
     public String getCallback() {
-        return "CREATE_USER";
+        return "START";
     }
 
     @Override
     public void handle(Long chatId) {
-        dialogService.startDialog(chatId);
+        startCommandHandler.handle(chatId);
     }
 }
