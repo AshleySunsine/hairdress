@@ -15,7 +15,7 @@ public class DeleteUserCallbackHandler implements CallbackHandler {
     }
 
     @Override
-    public void handle(Long chatId) {
-        sender.sendMessage(chatId, "Функция удаления в разработке");
+    public void handle(Long chatId, boolean override) {
+        sender.sendMessage(chatId, "Функция удаления в разработке", null, override);
     }
 }

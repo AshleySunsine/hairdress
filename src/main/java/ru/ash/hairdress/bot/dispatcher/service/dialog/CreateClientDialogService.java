@@ -26,7 +26,6 @@ public class CreateClientDialogService extends BaseDialogService {
     @Override
     protected boolean onProcessInput(Long chatId, String input, DialogContext context) {
         String step = context.get("step");
-
         if ("name".equals(step)) {
             context.put("name", input);
             context.put("step", "phone");
@@ -42,7 +41,7 @@ public class CreateClientDialogService extends BaseDialogService {
                 context.put("email", input);
             }
             finishDialog(chatId, context);
-            return true;
+            return false;
         }
         return false;
     }
@@ -69,7 +68,7 @@ public class CreateClientDialogService extends BaseDialogService {
     }
 
     private void finishDialog(Long chatId, DialogContext context) {
-        Client client = new Client(); // Бывший User
+        Client client = new Client();
         client.setName(context.get("name"));
         client.setPhone(context.get("phone"));
         client.setEmail(context.get("email"));
@@ -78,11 +77,6 @@ public class CreateClientDialogService extends BaseDialogService {
 
         finishDialogSuccess(chatId, context,
                 "✅ Клиент " + client.getName() + " создан!");
-    }
-
-    private void sendMessage(Long chatId, String text) {
-        // Отправка без кнопки отмены (кнопка добавится в showCancelButton)
-        sender.sendMessage(chatId, text);
     }
 
     @Override

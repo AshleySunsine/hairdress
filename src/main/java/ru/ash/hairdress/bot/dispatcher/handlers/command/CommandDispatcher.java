@@ -36,7 +36,6 @@ public class CommandDispatcher {
             boolean processed = dialog.processInput(chatId, messageText);
 
             if (!processed) {
-                // Если ввод не обработан - сбрасываем все диалоги
                 dialogRegistry.cancelAllDialogs(chatId);
                 handleCommand(messageText, chatId);
             }
@@ -52,7 +51,7 @@ public class CommandDispatcher {
 
         CommandHandler handler = handlers.getOrDefault(messageText,
                 handlers.get("/unknown"));
-        handler.handle(chatId);
+        handler.handle(chatId, false);
     }
 
     private void printAllCommands() {

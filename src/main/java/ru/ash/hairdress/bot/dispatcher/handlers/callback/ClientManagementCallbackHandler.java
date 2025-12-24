@@ -20,11 +20,11 @@ public class ClientManagementCallbackHandler implements CallbackHandler {
     }
 
     @Override
-    public void handle(Long chatId) {
+    public void handle(Long chatId, boolean override) {
         String message = "👥 *Управление клиентами*";
 
         InlineKeyboardMarkup keyboard = createClientManagementKeyboard();
-        sender.sendMessageWithKeyboard(chatId, message, keyboard);
+        sender.sendMessage(chatId, message, keyboard, override);
     }
 
     private InlineKeyboardMarkup createClientManagementKeyboard() {

@@ -41,7 +41,7 @@ public class CallbackDispatcher {
         // 2. Обычный callback
         CallbackHandler handler = handlers.getOrDefault(callbackData,
                 handlers.get("UNKNOWN"));
-        handler.handle(chatId);
+        handler.handle(chatId, false);
     }
 
     private void printAllCallback() {

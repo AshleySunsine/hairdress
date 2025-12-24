@@ -15,7 +15,7 @@ public class CreateClientCallbackHandler implements CallbackHandler {
     }
 
     @Override
-    public void handle(Long chatId) {
+    public void handle(Long chatId, boolean override) {
         dialogService.startDialog(chatId);
     }
 }

@@ -20,7 +20,7 @@ public class StartCommandHandler implements CommandHandler {
     }
 
     @Override
-    public void handle(Long chatId) {
+    public void handle(Long chatId, boolean override) {
         String welcomeMessage = """
             ✂️ *Добро пожаловать в систему учёта парикмахерской!*
             
@@ -28,7 +28,7 @@ public class StartCommandHandler implements CommandHandler {
             """;
 
         InlineKeyboardMarkup keyboard = createMainMenuKeyboard();
-        sender.sendMessageWithKeyboard(chatId, welcomeMessage, keyboard);
+        sender.sendMessage(chatId, welcomeMessage, keyboard, override);
     }
 
     private InlineKeyboardMarkup createMainMenuKeyboard() {

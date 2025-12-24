@@ -24,7 +24,7 @@ public class CreateUserCommandHandler implements CommandHandler {
     }
 
     @Override
-    public void handle(Long chatId) {
+    public void handle(Long chatId, boolean override) {
         String welcomeMessage = "👋 Выберите действие:";
 
         // Создаем инлайн-клавиатуру
@@ -49,6 +49,6 @@ public class CreateUserCommandHandler implements CommandHandler {
         rows.add(row2);
         keyboard.setKeyboard(rows);
 
-        sender.sendMessageWithKeyboard(chatId, welcomeMessage, keyboard);
+        sender.sendMessage(chatId, welcomeMessage, keyboard, true);
     }
 }

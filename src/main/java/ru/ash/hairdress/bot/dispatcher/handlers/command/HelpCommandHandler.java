@@ -19,13 +19,13 @@ public class HelpCommandHandler implements CommandHandler {
     }
 
     @Override
-    public void handle(Long chatId) {
+    public void handle(Long chatId, boolean override) {
         String message = """
     Доступные команды:
             /start - Начать работу
             /clients - Показать список пользователей
             /help - Показать справку
     """;
-        sender.sendMessage(chatId, message);
+        sender.sendMessage(chatId, message, null, override);
     }
 }

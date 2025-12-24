@@ -19,7 +19,7 @@ public class UnknownCommandHandler implements CommandHandler {
     }
 
     @Override
-    public void handle(Long chatId) {
+    public void handle(Long chatId, boolean override) {
         String welcomeMessage = """
             👋 Я получил неизвестную команду.
             Доступные команды:
@@ -27,6 +27,6 @@ public class UnknownCommandHandler implements CommandHandler {
             /clients - Показать список пользователей
             /help - Показать справку
             """;
-        sender.sendMessage(chatId, welcomeMessage);
+        sender.sendMessage(chatId, welcomeMessage, null, override);
     }
 }

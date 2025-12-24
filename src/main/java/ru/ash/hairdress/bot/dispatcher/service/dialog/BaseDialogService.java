@@ -111,7 +111,7 @@ public abstract class BaseDialogService implements DialogService {
         rows.add(row);
         keyboard.setKeyboard(rows);
 
-        sender.sendMessageWithKeyboard(chatId, message, keyboard);
+        sender.sendMessage(chatId, message, keyboard, true);
     }
 
     private boolean askCancelConfirmation(Long chatId, DialogContext context) {
@@ -133,7 +133,7 @@ public abstract class BaseDialogService implements DialogService {
         rows.add(row);
         keyboard.setKeyboard(rows);
 
-        sender.sendMessageWithKeyboard(chatId, "❓ Вы уверены, что хотите отменить?", keyboard);
+        sender.sendMessage(chatId, "❓ Вы уверены, что хотите отменить?", keyboard, false);
         return true;
     }
 
@@ -147,7 +147,7 @@ public abstract class BaseDialogService implements DialogService {
             return true;
         }
 
-        sender.sendMessage(chatId, "Пожалуйста, ответьте 'да' или 'нет':");
+        sender.sendMessage(chatId, "Пожалуйста, ответьте 'да' или 'нет':", null, true);
         return true;
     }
 
@@ -168,15 +168,15 @@ public abstract class BaseDialogService implements DialogService {
 
     private void finishCancel(Long chatId, DialogContext context) {
         contexts.remove(chatId);
-        sender.sendMessage(chatId, "❌ Действие отменено");
-        targetHandler.handle(chatId); // Работает для CommandHandler И CallbackHandler
+        sender.sendMessage(chatId, "❌ Действие отменено", null, false);
+        targetHandler.handle(chatId, true); // Работает для CommandHandler И CallbackHandler
         onCancel(chatId, context);
     }
 
     protected void finishDialogSuccess(Long chatId, DialogContext context, String successMessage) {
         contexts.remove(chatId);
-        sender.sendMessage(chatId, successMessage);
-        targetHandler.handle(chatId);
+        sender.sendMessage(chatId, successMessage, null, true);
+        targetHandler.handle(chatId, false);
     }
 
     protected String getCurrentPrompt(Long chatId, DialogContext context) {

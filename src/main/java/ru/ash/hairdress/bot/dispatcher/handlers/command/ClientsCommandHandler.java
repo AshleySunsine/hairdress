@@ -20,11 +20,11 @@ public class ClientsCommandHandler implements CommandHandler {
     }
 
     @Override
-    public void handle(Long chatId) {
+    public void handle(Long chatId, boolean override) {
         List<Client> clients = clientService.getAllClients();
 
         if (clients.isEmpty()) {
-            sender.sendMessage(chatId, "📭 В базе данных нет пользователей.");
+            sender.sendMessage(chatId, "📭 В базе данных нет пользователей.", null, override);
             return;
         }
 
@@ -40,6 +40,6 @@ public class ClientsCommandHandler implements CommandHandler {
         }
 
         response.append("\nВсего клиентов: ").append(clients.size());
-        sender.sendMessage(chatId, response.toString());
+        sender.sendMessage(chatId, response.toString(), null, true);
     }
 }

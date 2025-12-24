@@ -38,7 +38,7 @@ public class MessageSender {
     /**
      * Начать диалог - отправляет новое сообщение и запоминает его
      */
-    public Integer startDialogMessage(Long chatId, String text, InlineKeyboardMarkup keyboard) {
+    private Integer overrideDialogMessage(Long chatId, String text, InlineKeyboardMarkup keyboard) {
         try {
             // Удаляем предыдущее диалоговое сообщение, если есть
             cleanupDialogMessage(chatId);
@@ -66,6 +66,56 @@ public class MessageSender {
         }
     }
 
+    public void sendMessage(Long chatId, String text, InlineKeyboardMarkup keyboard, boolean override) {
+        if (override) {
+            overrideDialogMessage(chatId, text, keyboard);
+        } else {
+            sendMessage(chatId, text, keyboard);
+        }
+    }
+
+
+    private void sendMessage(Long chatId, String text, InlineKeyboardMarkup keyboard) {
+        try {
+            SendMessage message = new SendMessage(chatId.toString(), text);
+            if (keyboard != null) {
+                message.setReplyMarkup(keyboard);
+            }
+            bot.execute(message);
+        } catch (TelegramApiException e) {
+            log.error("Ошибка отправки сообщения", e);
+        }
+    }
+
+    // ==================== УТИЛИТЫ ====================
+
+    /**
+     * Отправить временное сообщение (исчезнет через время)
+     */
+    public void sendTemporaryMessage(Long chatId, String text, int secondsToLive) {
+        try {
+            SendMessage message = new SendMessage(chatId.toString(), text);
+            Message sent = bot.execute(message);
+
+            // Удалить через N секунд
+            scheduleDelete(chatId, sent.getMessageId(), secondsToLive);
+        } catch (TelegramApiException e) {
+            log.error("Ошибка отправки временного сообщения", e);
+        }
+    }
+
+    private void scheduleDelete(Long chatId, Integer messageId, int delaySeconds) {
+        new Thread(() -> {
+            try {
+                Thread.sleep(delaySeconds * 1000L);
+                DeleteMessage delete = new DeleteMessage(chatId.toString(), messageId);
+                bot.execute(delete);
+            } catch (Exception e) {
+                log.warn("Не удалось удалить временное сообщение", e);
+            }
+        }).start();
+    }
+
     /**
      * Обновить диалоговое сообщение (редактирование)
      */
@@ -73,7 +123,7 @@ public class MessageSender {
         DialogMessageState state = dialogStates.get(chatId);
         if (state == null || state.dialogMessageId == null) {
             // Нет диалогового сообщения - создаём новое
-            startDialogMessage(chatId, newText, newKeyboard);
+            overrideDialogMessage(chatId, newText, newKeyboard);
             return true;
         }
 
@@ -130,59 +180,5 @@ public class MessageSender {
                 // Сообщение могло быть уже удалено - это нормально
             }
         }
-    }
-
-    // ==================== ОБЫЧНЫЕ СООБЩЕНИЯ ====================
-
-    /**
-     * Отправить обычное сообщение (не диалоговое)
-     */
-    public void sendMessage(Long chatId, String text) {
-        sendMessage(chatId, text, null);
-    }
-
-    public void sendMessageWithKeyboard(Long chatId, String text, InlineKeyboardMarkup keyboard) {
-        sendMessage(chatId, text, keyboard);
-    }
-
-    private void sendMessage(Long chatId, String text, InlineKeyboardMarkup keyboard) {
-        try {
-            SendMessage message = new SendMessage(chatId.toString(), text);
-            if (keyboard != null) {
-                message.setReplyMarkup(keyboard);
-            }
-            bot.execute(message);
-        } catch (TelegramApiException e) {
-            log.error("Ошибка отправки сообщения", e);
-        }
-    }
-
-    // ==================== УТИЛИТЫ ====================
-
-    /**
-     * Отправить временное сообщение (исчезнет через время)
-     */
-    public void sendTemporaryMessage(Long chatId, String text, int secondsToLive) {
-        try {
-            SendMessage message = new SendMessage(chatId.toString(), text);
-            Message sent = bot.execute(message);
-
-            // Удалить через N секунд
-            scheduleDelete(chatId, sent.getMessageId(), secondsToLive);
-        } catch (TelegramApiException e) {
-            log.error("Ошибка отправки временного сообщения", e);
-        }
-    }
-
-    private void scheduleDelete(Long chatId, Integer messageId, int delaySeconds) {
-        new Thread(() -> {
-            try {
-                Thread.sleep(delaySeconds * 1000L);
-                DeleteMessage delete = new DeleteMessage(chatId.toString(), messageId);
-                bot.execute(delete);
-            } catch (Exception e) {
-                log.warn("Не удалось удалить временное сообщение", e);
-            }
-        }).start();
     }
 }

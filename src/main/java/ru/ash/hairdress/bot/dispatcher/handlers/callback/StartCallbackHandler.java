@@ -15,7 +15,7 @@ public class StartCallbackHandler implements CallbackHandler {
     }
 
     @Override
-    public void handle(Long chatId) {
-        startCommandHandler.handle(chatId);
+    public void handle(Long chatId, boolean override) {
+        startCommandHandler.handle(chatId, override);
     }
 }

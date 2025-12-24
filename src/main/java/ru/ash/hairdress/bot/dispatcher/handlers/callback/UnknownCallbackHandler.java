@@ -15,7 +15,7 @@ public class UnknownCallbackHandler implements CallbackHandler {
     }
 
     @Override
-    public void handle(Long chatId) {
-        sender.sendMessage(chatId, "❌ Неизвестное действие. Используйте меню.");
+    public void handle(Long chatId, boolean override) {
+        sender.sendMessage(chatId, "❌ Неизвестное действие. Используйте меню.", null, override);
     }
 }
