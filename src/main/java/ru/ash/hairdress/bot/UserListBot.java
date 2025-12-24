@@ -45,7 +45,7 @@ public class UserListBot extends TelegramLongPollingBot {
         try {
             List<BotCommand> commands = new ArrayList<>();
             commands.add(new BotCommand("/start", "Начать работу с ботом"));
-            commands.add(new BotCommand("/users", "Получить список пользователей"));
+            commands.add(new BotCommand("/clients", "Получить список пользователей"));
             commands.add(new BotCommand("/help", "Показать справку"));
 
             this.execute(new SetMyCommands(commands, new BotCommandScopeDefault(), null));
@@ -57,7 +57,7 @@ public class UserListBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            // Обработка команд (/start, /users и т.д.)
+            // Обработка команд (/start, /clients и т.д.)
             String messageText = update.getMessage().getText();
             Long chatId = update.getMessage().getChatId();
             dispatcher.dispatch(messageText, chatId);

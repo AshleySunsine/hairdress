@@ -10,7 +10,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class ClientsCommandHandler implements CommandHandler {
+public class ClientsListCommandHandler implements CommandHandler {
     private final ClientService clientService;
     private final MessageSender sender;
 
