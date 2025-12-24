@@ -133,7 +133,7 @@ public abstract class BaseDialogService implements DialogService {
         rows.add(row);
         keyboard.setKeyboard(rows);
 
-        sender.sendMessage(chatId, "❓ Вы уверены, что хотите отменить?", keyboard, false);
+        sender.sendMessage(chatId, "❓ Вы уверены, что хотите отменить?", keyboard, true);
         return true;
     }
 
@@ -168,8 +168,8 @@ public abstract class BaseDialogService implements DialogService {
 
     private void finishCancel(Long chatId, DialogContext context) {
         contexts.remove(chatId);
-        sender.sendMessage(chatId, "❌ Действие отменено", null, false);
-        targetHandler.handle(chatId, true); // Работает для CommandHandler И CallbackHandler
+        sender.sendMessage(chatId, "❌ Действие отменено", null, true);
+        targetHandler.handle(chatId, false);
         onCancel(chatId, context);
     }
 

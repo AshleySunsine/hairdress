@@ -29,20 +29,23 @@ public class CommandDispatcher {
     }
 
     public void dispatch(String messageText, Long chatId) {
+        log.info("Dispatching command: {}", messageText);
         Optional<DialogService> activeDialog = dialogRegistry.findActiveDialog(chatId);
 
         if (activeDialog.isPresent()) {
             DialogService dialog = activeDialog.get();
             boolean processed = dialog.processInput(chatId, messageText);
 
-            if (!processed) {
+            if (!processed && dialog.isUserInDialog(chatId)) {
+                // ⬇️ ТОЛЬКО если диалог всё ещё активен (не удалён контекст)
                 dialogRegistry.cancelAllDialogs(chatId);
                 handleCommand(messageText, chatId);
             }
+            // Если !processed но контекста уже нет - значит диалог завершился
+            // Игнорируем ввод, не вызываем handleCommand()
             return;
         }
 
-        // 2. Нет активного диалога - обычная команда
         handleCommand(messageText, chatId);
     }
 

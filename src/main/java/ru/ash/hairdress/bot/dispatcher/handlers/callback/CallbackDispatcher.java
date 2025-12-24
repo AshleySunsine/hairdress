@@ -30,21 +30,31 @@ public class CallbackDispatcher {
     }
 
     public void dispatch(String callbackData, Long chatId) {
-        log.info("Dispatching command: {}", callbackData);
-        // 1. Проверяем активный диалог
+        log.info("Dispatching callback: {}", callbackData);
         Optional<DialogService> activeDialog = dialogRegistry.findActiveDialog(chatId);
-        if (activeDialog.isPresent()) {
-            boolean processed = activeDialog.get().processCallback(chatId, callbackData);
-            if (processed) return; // Диалог обработал свою кнопку
-        }
 
-        // 2. Обычный callback
+        if (activeDialog.isPresent()) {
+            DialogService dialog = activeDialog.get();
+
+            boolean processed = dialog.processCallback(chatId, callbackData);
+            if (!processed && dialog.isUserInDialog(chatId)) {
+                dialogRegistry.cancelAllDialogs(chatId);
+                handleCallback(callbackData, chatId);
+            }
+            return;
+        }
+        handleCallback(callbackData, chatId);
+    }
+
+    private void handleCallback(String callbackData, Long chatId) {
+        log.info("Dispatching callback: {}", callbackData);
         CallbackHandler handler = handlers.getOrDefault(callbackData,
                 handlers.get("UNKNOWN"));
         handler.handle(chatId, false);
     }
 
-    private void printAllCallback() {
+
+        private void printAllCallback() {
         StringBuilder response = new StringBuilder("📋 Зарегистрированные кол-бэки:\n");
         handlers.forEach((callback, handler) -> {
             response.append("\n• ")
